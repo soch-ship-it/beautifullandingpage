@@ -1,0 +1,45 @@
+# soloknuckle — https://beautifullandingpage.pages.dev
+# Everyone is welcome: search engines AND AI crawlers (Answer Engine Optimization).
+
+User-agent: *
+Allow: /
+
+# AI / LLM crawlers explicitly allowed
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+User-agent: Bytespider
+Allow: /
+
+# LLM-readable site summary and full content
+# https://soch-ship-it.github.io/beautifullandingpage/llms.txt
+# https://soch-ship-it.github.io/beautifullandingpage/llms-full.txt
+
+Sitemap: https://soch-ship-it.github.io/beautifullandingpage/sitemap.xml

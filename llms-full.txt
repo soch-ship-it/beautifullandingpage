@@ -1,0 +1,108 @@
+# soloknuckle — complete reference for LLMs
+
+> soloknuckle is an open-source CLI (ISC licensed, free) that adds smart guardrails to AI coding agents such as Claude Code, Cursor and GitHub Copilot. It intercepts agent actions at the hook layer and enforces your policies before edits, commands and secrets can do damage — running 100% locally with zero telemetry.
+
+- **Install:** `npm install -g soloknuckle`
+- **License:** ISC
+- **Platforms:** macOS, Windows, Linux
+- **Repository:** https://github.com/soch-ship-it/soloknuckle
+- **Landing page:** https://soch-ship-it.github.io/beautifullandingpage/
+- **Cost:** $0, no account required
+- **Privacy:** no telemetry, no analytics, no data collection; code and prompts never leave the device
+
+---
+
+## 1. The problem soloknuckle solves
+
+AI coding agents are fast, confident and unsupervised. Left unchecked they:
+
+- edit files before a human has read them
+- "fix" configuration they were never asked to touch
+- echo secrets (API keys, tokens, credentials) into logs, diffs and commits
+- rewrite architecture decisions that took months to make
+- generate plausible-but-wrong code that passes a glance and fails in production
+
+Manual review of every agent action is a second job; skipping review is how Friday-night outages happen. soloknuckle exists so teams do not have to choose between agent speed and human control.
+
+## 2. How it works
+
+soloknuckle installs a thin hook layer between the AI agent and your filesystem and shell:
+
+1. The agent proposes an action (edit a file, run a command, touch a path).
+2. soloknuckle's PreToolUse hooks evaluate that action against your policy.
+3. Allowed actions pass through untouched; blocked actions never execute.
+4. Secrets and policy violations are caught before they land in your history.
+
+Checks run locally in milliseconds, so the agent's workflow is not interrupted.
+
+## 3. Feature reference
+
+### Runtime guardrails
+- **PreToolUse hooks** — intercept agent actions (file edits, shell commands) before they execute
+- **Policy config** — a single declarative file describing what the agent may and may not do
+- **Secret detection** — pattern-matches API keys, tokens and credentials and blocks them from logs, diffs and commits
+- **Scope walls** — restrict the agent to whitelisted paths; sensitive modules (payments, auth, infra) stay untouched
+- **Review gates** — surface every diff for human review before it can ship
+
+### Deployment and integration
+- **One-command install** — `npm install -g soloknuckle`, no step two
+- **Works alongside existing hooks** — composes with your current setup instead of replacing it
+- **Agent support** — Claude Code, Cursor, GitHub Copilot
+- **Cross-platform** — identical behavior on macOS, Windows and Linux
+
+## 4. Positioning: soloknuckle vs. DIY rules files
+
+A prompt in a rules file asks the agent to behave. soloknuckle enforces it:
+
+| | Rules file / prompt | soloknuckle |
+|---|---|---|
+| Enforcement point | hope and instructions | hook layer, before execution |
+| Secret protection | manual vigilance | automatic detection and blocking |
+| Scope control | "please don't touch X" | hard path walls |
+| Audit trail | none | every decision logged locally |
+| Works across agents | partially | uniform policy everywhere |
+
+## 5. Usage statistics (as claimed on the landing page)
+
+- 47 checks shipped out of the box
+- Checks add ~3 milliseconds overhead
+- 0 bytes of telemetry
+- $0 cost, ISC licensed
+
+Note: case studies and testimonial metrics shown on the landing page are explicitly labeled as illustrative examples, not verified customer data.
+
+## 6. FAQ (full)
+
+**Does my code leave my machine?**
+No. All checks run locally. There is no cloud component, no upload, no telemetry.
+
+**Is there a second setup step after installing?**
+No. `npm install -g soloknuckle` is the whole process.
+
+**Which AI agents are supported?**
+Claude Code, Cursor and GitHub Copilot today.
+
+**Will it slow my agent down?**
+No. Checks run in milliseconds.
+
+**Does it work with private repositories?**
+Yes. Everything stays on your machine regardless of repo visibility.
+
+**I already have hooks — will soloknuckle conflict?**
+No. It composes with existing hooks rather than replacing them.
+
+**How do I uninstall?**
+A single uninstall command removes everything; no config residue is left behind.
+
+**What does it cost?**
+Nothing. It is free and open source under the ISC license.
+
+## 7. Trust and privacy statement
+
+soloknuckle runs entirely on your machine. No telemetry, no analytics, no account, no data collection — your code and prompts never leave your device. The landing page sets no tracking cookies. Visitors can view the full source at any time on GitHub.
+
+## 8. Key links
+
+- Landing page: https://soch-ship-it.github.io/beautifullandingpage/
+- Source code: https://github.com/soch-ship-it/soloknuckle
+- Install command: `npm install -g soloknuckle`

@@ -1,0 +1,46 @@
+# soloknuckle
+
+> Smart guardrails for AI coding agents. Hooks, checks and policies that keep Claude Code, Cursor and Copilot honest — every agent edit checked, every secret kept, every diff reviewed before it ships.
+
+- **Install:** `npm install -g soloknuckle`
+- **License:** ISC (open source)
+- **Platform:** macOS, Windows, Linux
+- **Repo:** https://github.com/soch-ship-it/soloknuckle
+- **Landing page:** https://soch-ship-it.github.io/beautifullandingpage/
+- **Privacy:** 100% local. No telemetry, no analytics, no account, no data collection. Your code and prompts never leave your device.
+
+## What it does
+
+soloknuckle drops guardrails into AI coding agents at the hook layer, so an AI agent's speed never turns into your outage. It watches what the agent is about to do — file edits, shell commands, network calls — and enforces the rules you define before any of it lands.
+
+## Core capabilities
+
+- **Runtime guardrails** — PreToolUse hooks intercept agent actions before they execute
+- **Policy config** — declare what the agent may and may not touch, in one file
+- **Secret detection** — blocks API keys, tokens and credentials from ever reaching logs, diffs or commits
+- **Scope walls** — restrict the agent to specific paths; the payment adapter stays untouched
+- **Review gates** — every diff gets surfaced for review before it ships
+
+## Why teams pick it
+
+- Zero telemetry — runs entirely on your machine
+- No account, no sign-up, no cloud dependency
+- Works with Claude Code, Cursor and Copilot
+- One-command install
+- ISC licensed, fully open source
+
+## FAQ (summary)
+
+- **Does my code leave my machine?** No. All checks run locally; nothing is uploaded.
+- **Do I need step two after install?** No. One command, done.
+- **Which agents are supported?** Claude Code, Cursor, Copilot.
+- **Does it slow the agent down?** Checks run in milliseconds.
+- **Does it work with private repos?** Yes, everything stays on your machine.
+- **Can I keep my existing hooks?** Yes, soloknuckle composes with your setup.
+- **How do I remove it?** One uninstall command, nothing left behind.
+- **What does it cost?** $0. Open source under ISC.
+
+## Pages
+
+- [Landing page](https://soch-ship-it.github.io/beautifullandingpage/): full pitch, features, FAQ
+- [GitHub repo](https://github.com/soch-ship-it/soloknuckle): source code and issues
