@@ -54,6 +54,11 @@
       background-repeat: repeat-y; z-index: 20;
     }
     .menu-item { display: flex; align-items: baseline; justify-content: space-between; }
+
+    /* "Features" heading: vertical text on md+, horizontal on mobile */
+    @media (min-width: 768px) {
+      .features-title { writing-mode: vertical-rl; transform: rotate(180deg); }
+    }
     .menu-dots { flex: 1; border-bottom: 2px dotted rgba(0,0,0,0.2); margin: 0 10px; }
 
     .reveal-on-scroll {
@@ -314,8 +319,8 @@
       </div>
 
       <!-- Green Sidebar -->
-      <div class="reveal-on-scroll w-full md:w-20 bg-brand-green relative flex md:flex-col items-center justify-between py-8 px-4 jagged-right-edge z-10 shrink-0">
-        <h2 class="font-display text-4xl md:text-5xl text-brand-cream md:vertical-text tracking-tight uppercase hover:text-brand-yellow transition-colors cursor-default">Features</h2>
+      <div class="reveal-on-scroll w-full md:w-20 bg-brand-green relative flex md:flex-col items-center justify-between py-8 px-4 jagged-right-edge z-10 shrink-0 overflow-hidden">
+        <h2 class="features-title font-display text-4xl md:text-5xl text-brand-cream tracking-tight uppercase hover:text-brand-yellow transition-colors cursor-default">Features</h2>
         <div class="hidden md:block text-[9px] font-bold text-brand-cream uppercase vertical-text tracking-widest mt-8 animate-pulse">47 checks live</div>
       </div>
 
