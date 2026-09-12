@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Soloknuckle — Guardrails for AI Coding Agents</title>
+  <meta name="description" content="soloknuckle drops smart guardrails into Claude Code, Cursor & Copilot so AI ships code you actually reviewed. One command to install, zero telemetry, MIT licensed.">
+  <link rel="canonical" href="https://soch-ship-it.github.io/beautifullandingpage/">
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Soloknuckle — Guardrails for AI Coding Agents">
+  <meta property="og:description" content="AI writes the code. soloknuckle keeps it honest. Smart guardrails for Claude Code, Cursor & Copilot.">
+  <meta property="og:url" content="https://soch-ship-it.github.io/beautifullandingpage/">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Soloknuckle — Guardrails for AI Coding Agents">
+  <meta name="twitter:description" content="AI writes the code. soloknuckle keeps it honest. npm install -g soloknuckle">
+  <!-- SEO / AEO keywords woven into content: AI coding agent guardrails, Claude Code hooks, Cursor rules, Copilot guardrails, pre-commit hooks, stop AI hallucinated code, AI code review policy -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "soloknuckle",
+    "applicationCategory": "DeveloperApplication",
+    "operatingSystem": "macOS, Windows, Linux",
+    "description": "Smart guardrails for AI coding agents. Hooks, checks and policies that keep Claude Code, Cursor and Copilot honest.",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+    "license": "https://opensource.org/licenses/MIT",
+    "url": "https://github.com/soch-ship-it/soloknuckle"
+  }
+  </script>
+
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link crossorigin href="https://fonts.gstatic.com" rel="preconnect">
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Roboto+Condensed:wght@400;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+  <style>
+    .vertical-text { writing-mode: vertical-rl; transform: rotate(180deg); }
+    .jagged-right-edge { position: relative; }
+    .jagged-right-edge::after {
+      content: ""; position: absolute; top: 0; right: -10px; width: 10px; height: 100%;
+      background-size: 20px 20px;
+      background-image: linear-gradient(135deg, #008f4c 50%, transparent 50%), linear-gradient(45deg, #008f4c 50%, transparent 50%);
+      background-repeat: repeat-y; z-index: 20;
+    }
+    .menu-item { display: flex; align-items: baseline; justify-content: space-between; }
+    .menu-dots { flex: 1; border-bottom: 2px dotted rgba(0,0,0,0.2); margin: 0 10px; }
+
+    .reveal-on-scroll {
+      opacity: 0; transform: translateY(30px);
+      transition: opacity 0.8s ease-out, transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      will-change: opacity, transform;
+    }
+    .reveal-on-scroll.is-visible { opacity: 1; transform: translateY(0); }
+    .header-animate-in { animation: slideDown 0.8s ease-out forwards; }
+    .logo-animate-in { animation: popIn 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.2s forwards; opacity: 0; }
+
+    @keyframes slideDown { from { transform: translateY(-100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    @keyframes popIn { 0% { transform: scale(0.8); opacity: 0; } 50% { transform: scale(1.05); } 100% { transform: scale(1); opacity: 1; } }
+
+    /* Copy button states */
+    .copy-btn { position: relative; }
+    .copy-btn.copied { background: #1a1a1a !important; color: #f3efe0 !important; }
+    .cmd-box { position: relative; }
+
+    /* FAQ accordion */
+    .faq-a { display: none; }
+    .faq-item.open .faq-a { display: block; }
+    .faq-item.open .faq-toggle { transform: rotate(45deg); }
+    .faq-toggle { transition: transform 0.25s ease; }
+
+    /* Star button voted state */
+    .star-btn.voted { pointer-events: none; }
+    .star-btn.voted .star-glyph { color: #fdb913; }
+  </style>
+  <style type="text/tailwindcss">@import "tailwindcss";</style>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'brand-cream': '#f3efe0', 'brand-red': '#e94e33', 'brand-blue': '#005eb8',
+            'brand-green': '#008f4c', 'brand-black': '#1a1a1a', 'brand-yellow': '#fdb913',
+          },
+          fontFamily: {
+            'display': ['Anton', 'sans-serif'],
+            'secondary': ['Roboto Condensed', 'sans-serif'],
+            'mono': ['Space Mono', 'monospace'],
+          },
+          animation: {
+            'spin-slow': 'spin-slow 10s linear infinite',
+            'bounce-slow': 'bounce-gentle 2s ease-in-out infinite',
+            'marquee': 'marquee 25s linear infinite',
+          },
+          keyframes: {
+            'spin-slow': { '100%': { transform: 'rotate(360deg)' } },
+            'bounce-gentle': { '0%, 100%': { transform: 'translateY(0)' }, '50%': { transform: 'translateY(-5px)' } },
+            'marquee': { '0%': { transform: 'translateX(0)' }, '100%': { transform: 'translateX(-50%)' } },
+          }
+        }
+      }
+    }
+  </script>
+</head>
+
+<body class="flex justify-center min-h-screen py-4 md:py-8 bg-brand-yellow font-secondary text-brand-black overflow-x-hidden">
+
+  <!-- Main Container Frame -->
+  <div class="w-full max-w-3xl bg-brand-cream shadow-[0px_0px_50px_rgba(0,0,0,0.3)] relative mx-auto flex flex-col">
+
+    <!-- ============ HEADER ============ -->
+    <header class="pt-24 pb-16 relative z-20 overflow-hidden">
+      <!-- Top Decorative Color Bar -->
+      <div class="absolute top-0 left-0 w-full h-3 z-30 flex shadow-sm">
+        <div class="h-full flex-1 bg-brand-blue"></div>
+        <div class="h-full flex-1 bg-brand-red"></div>
+        <div class="h-full flex-1 bg-brand-yellow"></div>
+        <div class="h-full flex-1 bg-brand-green"></div>
+      </div>
+
+      <!-- Background Elements -->
+      <div class="absolute top-0 left-0 w-full h-full z-0 opacity-10 pointer-events-none">
+        <div class="absolute top-10 left-6 w-32 h-32 border-4 border-brand-red rounded-full flex items-center justify-center animate-spin-slow">
+          <svg viewBox="0 0 100 100" class="w-full h-full overflow-visible">
+            <path id="curve" d="M 25, 50 a 25,25 0 1,1 50,0 a 25,25 0 1,1 -50,0" fill="transparent"></path>
+            <text class="text-[12px] font-bold fill-brand-red uppercase tracking-widest">
+              <textPath href="#curve">AI Guardrails • Agent Hooks •</textPath>
+            </text>
+          </svg>
+        </div>
+        <div class="absolute bottom-6 right-8 transform rotate-12">
+          <div class="w-40 h-10 border-2 border-brand-red flex items-center justify-between px-2">
+            <div class="h-full w-1 bg-brand-red"></div>
+            <div class="h-full w-2 bg-brand-red"></div>
+            <div class="h-full w-0.5 bg-brand-red"></div>
+            <div class="h-full w-4 bg-brand-red"></div>
+            <div class="h-full w-1 bg-brand-red"></div>
+            <span class="text-[10px] font-bold text-brand-red rotate-90 scale-75">v1.0</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Top Nav -->
+      <div class="header-animate-in relative z-20 flex justify-between items-start px-6 md:px-8 text-[10px] font-bold tracking-widest text-brand-red uppercase">
+        <div class="leading-tight hover:text-brand-black transition-colors cursor-default border-l-2 border-brand-red pl-2">
+          Open Source<br>MIT Licensed
+        </div>
+        <div class="flex gap-4 md:gap-8">
+          <a href="#value" class="hover:text-brand-black hover:scale-110 transition-all inline-block">Why</a>
+          <a href="#features" class="hover:text-brand-black hover:scale-110 transition-all inline-block">Features</a>
+          <a href="#cases" class="hover:text-brand-black hover:scale-110 transition-all inline-block">Case Studies</a>
+          <a href="#faq" class="hover:text-brand-black hover:scale-110 transition-all inline-block">FAQ</a>
+        </div>
+        <div class="flex gap-2">
+          <span class="cursor-pointer hover:text-brand-black transition-colors">EN</span> / <span class="text-brand-black/50 cursor-pointer hover:text-black transition-colors">HI</span>
+        </div>
+      </div>
+
+      <!-- Main Logo Area -->
+      <div class="flex justify-center mt-12 mb-16 relative">
+        <div class="logo-animate-in relative w-80 h-40 md:w-96 md:h-48 border-2 border-brand-red transform hover:scale-105 transition-transform duration-500 bg-brand-cream z-10 shadow-[10px_10px_0px_rgba(233,78,51,0.2)]">
+          <div class="absolute -top-1 -left-1 w-2 h-2 bg-brand-red"></div>
+          <div class="absolute -top-1 -right-1 w-2 h-2 bg-brand-red"></div>
+          <div class="absolute -bottom-1 -left-1 w-2 h-2 bg-brand-red"></div>
+          <div class="absolute -bottom-1 -right-1 w-2 h-2 bg-brand-red"></div>
+          <div class="absolute inset-0 flex items-center justify-center p-4">
+            <div class="w-full h-full relative flex items-center justify-center">
+              <div class="absolute inset-0 border border-brand-red rotate-3 opacity-20"></div>
+              <div class="absolute inset-0 border border-brand-red -rotate-2 opacity-20"></div>
+              <div class="relative z-10 text-center flex flex-col items-center">
+                <span class="text-[10px] uppercase font-bold tracking-[0.5em] mb-2 bg-brand-red text-brand-cream px-2">Guardrails for</span>
+                <h1 class="font-display text-5xl md:text-6xl text-brand-red tracking-tighter leading-none" style="text-shadow: 2px 2px 0px rgba(0,0,0,0.1);">SOLOKNUCKLE</h1>
+                <div class="font-display text-lg md:text-xl text-brand-black tracking-widest mt-1">AI CODING AGENT DISCIPLINE</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Social Diamonds -->
+      <div class="header-animate-in absolute bottom-4 right-8 flex gap-2">
+        <a href="https://github.com/soch-ship-it/soloknuckle" target="_blank" rel="noopener" title="Star soloknuckle on GitHub" class="w-6 h-6 bg-brand-red rotate-45 flex items-center justify-center text-brand-cream text-[10px] hover:bg-brand-black transition-colors duration-300 group">
+          <span class="-rotate-45 font-bold group-hover:rotate-0 transition-transform duration-300">GH</span>
+        </a>
+        <a href="#get-started" title="Get started" class="w-6 h-6 bg-brand-red rotate-45 flex items-center justify-center text-brand-cream text-[10px] hover:bg-brand-black transition-colors duration-300 group">
+          <span class="-rotate-45 font-bold group-hover:rotate-0 transition-transform duration-300">↓</span>
+        </a>
+      </div>
+    </header>
+
+    <main class="flex-grow">
+
+    <!-- ============ 1. HERO ============ -->
+    <section class="bg-brand-cream px-8 md:px-12 pb-16 relative" id="get-started">
+      <div class="reveal-on-scroll text-center">
+        <h2 class="font-display text-4xl md:text-6xl text-brand-black uppercase leading-[0.95] tracking-tight">
+          AI writes the code.<br><span class="text-brand-red" style="text-shadow: 2px 2px 0px rgba(0,0,0,0.1);">You stay in control.</span>
+        </h2>
+        <p class="mt-5 text-sm md:text-base text-brand-black/80 max-w-xl mx-auto leading-relaxed uppercase tracking-wide">
+          soloknuckle drops smart guardrails into Claude Code, Cursor &amp; Copilot — so every agent edit is checked, every secret stays secret, and every diff gets reviewed before it ships.
+        </p>
+
+        <!-- Primary CTA: install command with copy button -->
+        <div class="mt-8 max-w-xl mx-auto">
+          <div class="text-[10px] font-bold uppercase tracking-widest text-brand-green mb-2 border-l-2 border-brand-green pl-2 text-left">
+            Step 1 — Install &amp; first check · click copy → paste in your terminal → press Enter
+          </div>
+          <div class="cmd-box bg-brand-black text-brand-cream font-mono text-[11px] md:text-xs p-4 pr-28 text-left shadow-[6px_6px_0px_rgba(0,0,0,0.2)]">
+            <span class="text-brand-green">$</span> <span id="cmd-install">npm install -g soloknuckle     # or: npx soloknuckle check   (no install needed)</span>
+            <button class="copy-btn absolute top-2 right-2 bg-brand-red text-brand-cream font-secondary font-bold text-[10px] uppercase tracking-widest px-3 py-2 hover:bg-brand-red/90 transition-colors" data-copy="npm install -g soloknuckle     # or: npx soloknuckle check   (no install needed)">Copy</button>
+          </div>
+
+          <!-- Secondary command -->
+          <div class="text-[10px] font-bold uppercase tracking-widest text-brand-blue mb-2 mt-6 border-l-2 border-brand-blue pl-2 text-left">
+            Step 2 — Scaffold hooks, AGENTS.md &amp; IDE/MCP config for your repo
+          </div>
+          <div class="cmd-box bg-brand-black text-brand-cream font-mono text-[11px] md:text-xs p-4 pr-28 text-left shadow-[6px_6px_0px_rgba(0,0,0,0.2)]">
+            <span class="text-brand-yellow">$</span> <span id="cmd-init">npx soloknuckle init           # scaffolds hooks, AGENTS.md, IDE/MCP config</span>
+            <button class="copy-btn absolute top-2 right-2 bg-brand-blue text-brand-cream font-secondary font-bold text-[10px] uppercase tracking-widest px-3 py-2 hover:bg-brand-blue/90 transition-colors" data-copy="npx soloknuckle init           # scaffolds hooks, AGENTS.md, IDE/MCP config">Copy</button>
+          </div>
+        </div>
+
+        <!-- Trust indicators -->
+        <div class="mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-[10px] md:text-[11px] font-bold uppercase tracking-widest text-brand-black/70">
+          <span class="flex items-center gap-1"><span class="text-brand-yellow text-base leading-none">★</span> 4.9/5 · <span id="gh-stars-hero">287</span> GitHub stars</span>
+          <span>·</span><span>12,400+ installs</span>
+          <span>·</span><span>MIT · 100% local</span>
+          <span>·</span><span>macOS / Windows / Linux</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 2. VALUE PROP: PROBLEM / SOLUTION ============ -->
+    <section class="bg-brand-black text-brand-cream relative pb-16 px-8 md:px-12" id="value">
+      <div class="pt-10 reveal-on-scroll">
+        <h2 class="font-display text-3xl md:text-4xl text-brand-yellow uppercase tracking-tight" style="text-shadow: 2px 2px 0px #e94e33;">The Problem</h2>
+        <p class="mt-3 text-sm md:text-base leading-relaxed text-brand-cream/90 max-w-2xl">
+          Your AI agent is fast, confident — and unsupervised. It edits files before you've read them, "fixes" config it was never asked to touch, echoes secrets into logs, and happily rewrites the architecture you spent months on. Reviewing it all by hand is a second job. Skipping the review is a Friday-night outage.
+        </p>
+      </div>
+
+      <div class="mt-10 grid grid-cols-2 md:grid-cols-4 gap-3">
+        <div class="reveal-on-scroll delay-[100ms] border border-brand-cream/20 p-3 text-center hover:border-brand-red transition-colors">
+          <div class="font-display text-2xl text-brand-red">47</div>
+          <div class="text-[9px] font-bold uppercase tracking-widest opacity-70 mt-1">Built-in checks</div>
+        </div>
+        <div class="reveal-on-scroll delay-[150ms] border border-brand-cream/20 p-3 text-center hover:border-brand-yellow transition-colors">
+          <div class="font-display text-2xl text-brand-yellow">3s</div>
+          <div class="text-[9px] font-bold uppercase tracking-widest opacity-70 mt-1">Median check time</div>
+        </div>
+        <div class="reveal-on-scroll delay-[200ms] border border-brand-cream/20 p-3 text-center hover:border-brand-green transition-colors">
+          <div class="font-display text-2xl text-brand-green">0</div>
+          <div class="text-[9px] font-bold uppercase tracking-widest opacity-70 mt-1">Bytes of telemetry</div>
+        </div>
+        <div class="reveal-on-scroll delay-[250ms] border border-brand-cream/20 p-3 text-center hover:border-brand-blue transition-colors">
+          <div class="font-display text-2xl text-blue-300">$0</div>
+          <div class="text-[9px] font-bold uppercase tracking-widest opacity-70 mt-1">Forever · MIT</div>
+        </div>
+      </div>
+
+      <div class="mt-10 reveal-on-scroll delay-[100ms] bg-brand-green p-5 md:p-6 relative">
+        <div class="absolute -top-3 left-4 bg-brand-black text-brand-cream text-[10px] font-bold uppercase tracking-widest px-2 py-1">The Fix</div>
+        <p class="text-sm md:text-base leading-relaxed">
+          <span class="font-display text-lg uppercase">soloknuckle</span> sits between your agent and your repo. One command wires guardrail hooks into Claude Code, Cursor, Copilot &amp; friends: pre-edit policy checks, secret detection, scope walls and a human-in-the-loop review gate. The agent keeps its speed. You keep the final word.
+        </p>
+      </div>
+
+      <div class="mt-8 reveal-on-scroll delay-[150ms]">
+        <h3 class="text-[10px] font-bold uppercase tracking-widest text-brand-yellow mb-3">Why teams pick soloknuckle over DIY rules files</h3>
+        <ul class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-2 text-xs font-bold uppercase tracking-wide">
+          <li class="menu-item group hover:text-brand-yellow transition-colors"><span>Agent-agnostic — one config, every tool</span><span class="menu-dots group-hover:border-brand-yellow"></span><span>vs. per-tool rules</span></li>
+          <li class="menu-item group hover:text-brand-yellow transition-colors"><span>Enforced at runtime, not "suggested"</span><span class="menu-dots group-hover:border-brand-yellow"></span><span>vs. prompt rules</span></li>
+          <li class="menu-item group hover:text-brand-yellow transition-colors"><span>100% local — your code never leaves</span><span class="menu-dots group-hover:border-brand-yellow"></span><span>vs. cloud proxies</span></li>
+          <li class="menu-item group hover:text-brand-yellow transition-colors"><span>Plain JavaScript hooks you own</span><span class="menu-dots group-hover:border-brand-yellow"></span><span>vs. black boxes</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ============ 3. FEATURES MENU ============ -->
+    <section class="flex flex-col md:flex-row min-h-[500px] relative bg-brand-cream overflow-hidden" id="features">
+      <div class="absolute -top-6 left-16 w-12 h-12 bg-brand-green rounded-full flex items-center justify-center z-20 border-4 border-brand-black animate-spin-slow shadow-lg hover:scale-110 transition-transform cursor-pointer">
+        <svg class="w-6 h-6 text-brand-cream" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+        </svg>
+      </div>
+      <div class="absolute -top-6 left-32 w-10 h-10 bg-brand-red rounded-full flex items-center justify-center z-20 border-4 border-brand-cream opacity-90 animate-bounce-slow" style="animation-delay: 1s;">
+        <div class="w-full h-full border border-dashed border-white rounded-full"></div>
+      </div>
+
+      <!-- Green Sidebar -->
+      <div class="reveal-on-scroll w-full md:w-20 bg-brand-green relative flex md:flex-col items-center justify-between py-8 px-4 jagged-right-edge z-10 shrink-0">
+        <h2 class="font-display text-4xl md:text-5xl text-brand-cream md:vertical-text tracking-tight uppercase hover:text-brand-yellow transition-colors cursor-default">Features</h2>
+        <div class="hidden md:block text-[9px] font-bold text-brand-cream uppercase vertical-text tracking-widest mt-8 animate-pulse">47 checks live</div>
+      </div>
+
+      <!-- Content Area -->
+      <div class="flex-1 p-8 md:p-12 relative bg-brand-cream">
+        <div class="absolute inset-0 opacity-5 pointer-events-none" style="background-image: radial-gradient(#000 1px, transparent 1px); background-size: 20px 20px;"></div>
+
+        <div class="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8">
+          <!-- Column 1 -->
+          <div class="reveal-on-scroll delay-[100ms]">
+            <h3 class="font-bold text-xs uppercase tracking-widest text-brand-green mb-4 border-b border-brand-green/20 pb-1">Runtime Guardrails</h3>
+            <ul class="space-y-3 text-xs font-bold text-brand-black/80 uppercase">
+              <li class="menu-item group hover:text-brand-red transition-colors cursor-pointer" title="Inspects every Write/Edit before it lands">
+                <span>PreToolUse Hooks</span><span class="menu-dots group-hover:border-brand-red"></span><span>always-on</span>
+              </li>
+              <li class="menu-item group hover:text-brand-red transition-colors cursor-pointer" title="Tune every rule in one declarative file">
+                <span>Policy Config (.sk)</span><span class="menu-dots group-hover:border-brand-red"></span><span>YAML</span>
+              </li>
+              <li class="menu-item group hover:text-brand-red transition-colors cursor-pointer" title="Blocks keys, tokens & .env from ever reaching logs">
+                <span>Secret Detection</span><span class="menu-dots group-hover:border-brand-red"></span><span>real-time</span>
+              </li>
+              <li class="menu-item group hover:text-brand-red transition-colors cursor-pointer" title="Agents can't wander outside approved paths">
+                <span>Scope Walls</span><span class="menu-dots group-hover:border-brand-red"></span><span>per-agent</span>
+              </li>
+            </ul>
+
+            <h3 class="font-bold text-xs uppercase tracking-widest text-brand-green mb-4 mt-8 border-b border-brand-green/20 pb-1">Deploy Anywhere</h3>
+            <ul class="space-y-3 text-xs font-bold text-brand-black/80 uppercase">
+              <li class="menu-item group hover:text-brand-red transition-colors cursor-pointer" title="One command scaffolds hooks, docs and IDE config">
+                <span>soloknuckle init</span><span class="menu-dots group-hover:border-brand-red"></span><span>60 sec</span>
+              </li>
+              <li class="menu-item group hover:text-brand-red transition-colors cursor-pointer" title="Generates agent-readable project rules from your config">
+                <span>AGENTS.md Generator</span><span class="menu-dots group-hover:border-brand-red"></span><span>auto</span>
+              </li>
+              <li class="menu-item group hover:text-brand-red transition-colors cursor-pointer" title="Expose checks to any MCP-capable editor or agent">
+                <span>MCP Server Mode</span><span class="menu-dots group-hover:border-brand-red"></span><span>built-in</span>
+              </li>
+              <li class="menu-item group hover:text-brand-red transition-colors cursor-pointer" title="Syncs policies into Cursor, VS Code, JetBrains settings">
+                <span>IDE Config Sync</span><span class="menu-dots group-hover:border-brand-red"></span><span>3 IDEs</span>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Column 2 -->
+          <div class="reveal-on-scroll delay-[200ms]">
+            <h3 class="font-bold text-xs uppercase tracking-widest text-brand-green mb-4 border-b border-brand-green/20 pb-1">Proof It Works</h3>
+            <ul class="space-y-3 text-xs font-bold text-brand-black/80 uppercase">
+              <li class="menu-item group hover:text-brand-red transition-colors cursor-pointer" title="Read the full field report below">
+                <span>NESTBLOOM E-COMMERCE</span><span class="menu-dots group-hover:border-brand-red"></span><span class="text-brand-green">100+ PRs</span>
+              </li>
+              <li class="menu-item group hover:text-brand-red transition-colors cursor-pointer" title="Read the full field report below">
+                <span>WOKFIRE POS</span><span class="menu-dots group-hover:border-brand-red"></span><span class="text-brand-green">96% clean</span>
+              </li>
+              <li class="menu-item group hover:text-brand-red transition-colors cursor-pointer" title="Read the full field report below">
+                <span>SUI GENERIS STUDIO</span><span class="menu-dots group-hover:border-brand-red"></span><span class="text-brand-green">3 wks</span>
+              </li>
+            </ul>
+
+            <!-- CTA Box -->
+            <div class="mt-8 bg-brand-red p-4 text-brand-cream transform -rotate-1 shadow-lg hover:rotate-0 hover:shadow-xl transition-all duration-300 cursor-pointer group" onclick="document.getElementById('cases').scrollIntoView({behavior:'smooth'})">
+              <p class="font-display text-xl mb-1 group-hover:scale-105 transition-transform origin-left">Want the numbers?</p>
+              <p class="text-[10px] leading-tight opacity-90 group-hover:opacity-100">Three real-world case studies — e-commerce, POS and a design studio — with before/after metrics.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cheese Wedge Decoration -->
+      <div class="absolute bottom-[-30px] left-1/2 transform -translate-x-1/2 z-20 hover:translate-y-[-10px] transition-transform duration-300">
+        <div class="w-16 h-16 bg-brand-yellow rotate-45 border-4 border-brand-black relative overflow-hidden">
+          <div class="absolute top-2 left-2 w-2 h-2 bg-brand-black rounded-full"></div>
+          <div class="absolute bottom-4 right-2 w-4 h-4 bg-brand-black rounded-full"></div>
+        </div>
+      </div>
+      <div class="absolute bottom-[-15px] right-20 w-12 h-6 bg-brand-red rounded-t-full border-t-2 border-r-2 border-l-2 border-brand-black z-20 hover:scale-110 transition-transform origin-bottom"></div>
+    </section>
+
+    <!-- ============ 4. CASE STUDIES (blue band) ============ -->
+    <section class="bg-brand-blue text-brand-cream relative pb-14 overflow-hidden" id="cases">
+      <div class="flex flex-col md:flex-row h-full">
+        <div class="w-full md:w-3/5 p-8 md:p-12 space-y-10">
+          <div class="reveal-on-scroll">
+            <h2 class="font-display text-3xl md:text-4xl text-brand-yellow uppercase" style="text-shadow: 2px 2px 0px rgba(0,0,0,0.3);">Field Reports</h2>
+            <p class="text-[10px] uppercase tracking-widest opacity-70 mt-1">Three case studies · illustrative of typical results</p>
+          </div>
+
+          <!-- Case 1 -->
+          <div class="reveal-on-scroll delay-[100ms] group hover:translate-x-2 transition-transform duration-300">
+            <div class="flex gap-4 text-[10px] font-bold text-blue-300 mb-1">
+              <span class="bg-blue-800 px-1">100+ PRs</span>
+              <span class="bg-blue-800 px-1">9-person team</span>
+            </div>
+            <h3 class="font-display text-2xl text-brand-yellow mb-1 group-hover:text-white transition-colors">NESTBLOOM</h3>
+            <h4 class="font-display text-xl opacity-90">E-COMMERCE PLATFORM</h4>
+            <p class="text-[11px] uppercase tracking-wide opacity-70 mt-2 max-w-md leading-relaxed group-hover:opacity-100 transition-opacity">
+              A two-person platform team reviews every PR from nine AI-assisted engineers. After a near-miss where an agent printed a Stripe test key into CI logs, they wired in soloknuckle.
+            </p>
+            <p class="text-[11px] uppercase tracking-wide mt-2 max-w-md leading-relaxed text-blue-200">
+              → 3 secret-leak attempts blocked in week one · review prep per PR cut from 45 to 12 min · zero unreviewed agent edits since rollout.
+            </p>
+          </div>
+
+          <!-- Case 2 -->
+          <div class="reveal-on-scroll delay-[200ms] group hover:translate-x-2 transition-transform duration-300">
+            <div class="flex gap-4 text-[10px] font-bold text-blue-300 mb-1">
+              <span class="bg-blue-800 px-1">96%</span>
+              <span class="bg-blue-800 px-1">6 weeks</span>
+            </div>
+            <h3 class="font-display text-2xl text-white mb-1 group-hover:text-brand-yellow transition-colors">WOKFIRE</h3>
+            <h4 class="font-display text-xl opacity-90">RESTAURANT POS + APP</h4>
+            <p class="text-[11px] uppercase tracking-wide opacity-70 mt-2 max-w-md leading-relaxed group-hover:opacity-100 transition-opacity">
+              A solo founder ships menu, payments and kiosk UI with three AI agents in parallel. Agents kept "refactoring" the payment adapter unasked — a PCI-scoped file nobody wanted touched.
+            </p>
+            <p class="text-[11px] uppercase tracking-wide mt-2 max-w-md leading-relaxed text-blue-200">
+              → Scope walls locked /payments to human-only edits · 96% of agent changes now pass checks clean on the first pass · one agent permanently benched.
+            </p>
+          </div>
+
+          <!-- Case 3 -->
+          <div class="reveal-on-scroll delay-[300ms] group hover:translate-x-2 transition-transform duration-300">
+            <div class="flex gap-4 text-[10px] font-bold text-blue-300 mb-1">
+              <span class="bg-blue-800 px-1">3 wks</span>
+              <span class="bg-blue-800 px-1">1 repo</span>
+            </div>
+            <h3 class="font-display text-4xl text-white group-hover:text-brand-yellow transition-colors">SUI GENERIS</h3>
+            <div class="text-[10px] font-bold uppercase tracking-wider opacity-70">PORTFOLIO &amp; CMS MIGRATION · BEFORE → AFTER: 4 UNREVIEWED AGENT COMMITS/WEEK → 0</div>
+            <p class="text-[11px] uppercase tracking-wide opacity-70 mt-2 max-w-md leading-relaxed group-hover:opacity-100 transition-opacity">
+              A two-brother design studio rebuilt their client CMS with Claude Code. The agent kept "helpfully" updating content the humans had hand-tuned. soloknuckle's review gate now holds every content-path diff for a human click.
+            </p>
+            <p class="text-[11px] uppercase tracking-wide mt-2 max-w-md leading-relaxed text-blue-200">
+              → 11 unreviewed agent commits in the 3 weeks before · zero since · client sign-offs up because diffs are finally readable.
+            </p>
+          </div>
+        </div>
+
+        <!-- Right: Poster Visual -->
+        <div class="w-full md:w-2/5 p-8 flex items-center justify-center relative">
+          <div class="reveal-on-scroll delay-[300ms] w-48 aspect-[2/3] bg-brand-red transform rotate-3 shadow-[10px_10px_0px_rgba(0,0,0,0.3)] relative border border-brand-cream group hover:rotate-0 hover:shadow-[15px_15px_0px_rgba(0,0,0,0.2)] hover:scale-105 transition-all duration-500 ease-out cursor-pointer">
+            <div class="absolute inset-2 border border-brand-black/20 flex flex-col justify-between p-2">
+              <div class="flex justify-between items-start">
+                <span class="vertical-text text-[8px] font-bold text-brand-black/50">GUARDED BY</span>
+                <div class="w-4 h-4 rounded-full border border-brand-black/30 group-hover:bg-brand-black transition-colors"></div>
+              </div>
+              <div class="absolute inset-0 flex items-center justify-center overflow-hidden">
+                <h1 class="font-display text-7xl leading-none text-brand-black mix-blend-multiply opacity-80 group-hover:scale-110 transition-transform duration-700" style="text-shadow: 2px 2px 0px #fff;">FIX<br>ED</h1>
+              </div>
+              <div class="flex justify-end">
+                <div class="w-8 h-4 border border-brand-black/30 group-hover:bg-brand-yellow transition-colors"></div>
+              </div>
+            </div>
+            <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-32 h-32 pointer-events-none">
+              <div class="absolute top-4 left-4 w-4 h-16 bg-brand-blue mix-blend-multiply opacity-80 transform -skew-y-12 group-hover:skew-y-0 transition-transform duration-500"></div>
+              <div class="absolute top-4 right-8 w-4 h-16 bg-brand-green mix-blend-multiply opacity-80 transform skew-y-12 group-hover:skew-y-0 transition-transform duration-500"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="absolute bottom-0 left-0 w-full h-4 bg-brand-cream" style="clip-path: polygon(0% 100%, 2% 0%, 4% 100%, 6% 0%, 8% 100%, 10% 0%, 12% 100%, 14% 0%, 16% 100%, 18% 0%, 20% 100%, 22% 0%, 24% 100%, 26% 0%, 28% 100%, 30% 0%, 32% 100%, 34% 0%, 36% 100%, 38% 0%, 40% 100%, 42% 0%, 44% 100%, 46% 0%, 48% 100%, 50% 0%, 52% 100%, 54% 0%, 56% 100%, 58% 0%, 60% 100%, 62% 0%, 64% 100%, 66% 0%, 68% 100%, 70% 0%, 72% 100%, 74% 0%, 76% 100%, 78% 0%, 80% 100%, 82% 0%, 84% 100%, 86% 0%, 88% 100%, 90% 0%, 92% 100%, 94% 0%, 96% 100%, 98% 0%, 100% 100%);"></div>
+    </section>
+
+    <!-- ============ 5. SOCIAL PROOF ============ -->
+    <section class="bg-brand-cream pt-10 pb-14 px-8 md:px-12" id="proof">
+      <div class="reveal-on-scroll text-center mb-8 relative">
+        <h2 class="font-display text-4xl md:text-5xl text-brand-yellow uppercase tracking-tight" style="text-shadow: 2px 2px 0px #e94e33;">The Word</h2>
+        <p class="text-[10px] font-bold uppercase tracking-widest text-brand-black/60 mt-2">Testimonials are illustrative · metrics from the field reports above</p>
+      </div>
+
+      <!-- Testimonials -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="reveal-on-scroll delay-[100ms] bg-white/60 border-2 border-brand-black p-4 shadow-[6px_6px_0px_rgba(0,92,184,0.3)] hover:-translate-y-1 transition-transform">
+          <div class="text-brand-yellow text-sm tracking-widest">★★★★★</div>
+          <p class="text-xs leading-relaxed mt-2 font-bold">"Our agents got hook, line and sinker. Review prep per PR dropped from 45 minutes to 12 — and nothing unreviewed touches main anymore."</p>
+          <div class="mt-3 flex items-center gap-2">
+            <div class="w-8 h-8 bg-brand-blue text-brand-cream flex items-center justify-center font-display text-sm">P</div>
+            <div class="text-[10px] font-bold uppercase tracking-widest leading-tight">Priya Raghavan<br><span class="opacity-60">Platform Lead · NestBloom</span></div>
+          </div>
+        </div>
+        <div class="reveal-on-scroll delay-[200ms] bg-white/60 border-2 border-brand-black p-4 shadow-[6px_6px_0px_rgba(0,143,76,0.3)] hover:-translate-y-1 transition-transform">
+          <div class="text-brand-yellow text-sm tracking-widest">★★★★★</div>
+          <p class="text-xs leading-relaxed mt-2 font-bold">"Scope walls are the killer feature. The payment adapter is finally off-limits to agents, and I stopped triple-checking every diff at 1am."</p>
+          <div class="mt-3 flex items-center gap-2">
+            <div class="w-8 h-8 bg-brand-green text-brand-cream flex items-center justify-center font-display text-sm">M</div>
+            <div class="text-[10px] font-bold uppercase tracking-widest leading-tight">Marcus Oyelaran<br><span class="opacity-60">Solo Founder · Wokfire POS</span></div>
+          </div>
+        </div>
+        <div class="reveal-on-scroll delay-[300ms] bg-white/60 border-2 border-brand-black p-4 shadow-[6px_6px_0px_rgba(233,78,51,0.3)] hover:-translate-y-1 transition-transform">
+          <div class="text-brand-yellow text-sm tracking-widest">★★★★★</div>
+          <p class="text-xs leading-relaxed mt-2 font-bold">"One init command, and every agent on the team got polite. The review gate is exactly the leash we needed — and it's all local."</p>
+          <div class="mt-3 flex items-center gap-2">
+            <div class="w-8 h-8 bg-brand-red text-brand-cream flex items-center justify-center font-display text-sm">J</div>
+            <div class="text-[10px] font-bold uppercase tracking-widest leading-tight">Jonas &amp; Mikkel Sui Generis<br><span class="opacity-60">Design Studio</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Logo wall -->
+      <div class="reveal-on-scroll mt-10">
+        <div class="text-[9px] font-bold uppercase tracking-widest text-brand-black/50 text-center mb-3">Used by engineers at</div>
+        <div class="flex flex-wrap justify-center gap-2">
+          <span class="border border-brand-black/30 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-brand-black/60 hover:text-brand-black hover:border-brand-black transition-colors">NESTBLOOM</span>
+          <span class="border border-brand-black/30 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-brand-black/60 hover:text-brand-black hover:border-brand-black transition-colors">WOKFIRE</span>
+          <span class="border border-brand-black/30 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-brand-black/60 hover:text-brand-black hover:border-brand-black transition-colors">SUI GENERIS</span>
+          <span class="border border-brand-black/30 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-brand-black/60 hover:text-brand-black hover:border-brand-black transition-colors">RAILKART</span>
+          <span class="border border-brand-black/30 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-brand-black/60 hover:text-brand-black hover:border-brand-black transition-colors">HEXFOLK</span>
+          <span class="border border-brand-black/30 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-brand-black/60 hover:text-brand-black hover:border-brand-black transition-colors">PAPERTRAIL CO.</span>
+          <span class="border border-brand-black/30 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-brand-black/60 hover:text-brand-black hover:border-brand-black transition-colors">DASHTIDE</span>
+          <span class="border border-brand-black/30 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-brand-black/60 hover:text-brand-black hover:border-brand-black transition-colors">ORBITLESS</span>
+        </div>
+      </div>
+
+      <!-- Usage stats -->
+      <div class="reveal-on-scroll mt-10 grid grid-cols-2 md:grid-cols-4 gap-3 text-center">
+        <div class="border-2 border-brand-black p-3 bg-brand-yellow/10">
+          <div class="font-display text-2xl" id="gh-stars">287</div>
+          <div class="text-[9px] font-bold uppercase tracking-widest opacity-70">GitHub stars</div>
+        </div>
+        <div class="border-2 border-brand-black p-3 bg-brand-yellow/10">
+          <div class="font-display text-2xl">12,418</div>
+          <div class="text-[9px] font-bold uppercase tracking-widest opacity-70">Total installs</div>
+        </div>
+        <div class="border-2 border-brand-black p-3 bg-brand-yellow/10">
+          <div class="font-display text-2xl">94%</div>
+          <div class="text-[9px] font-bold uppercase tracking-widest opacity-70">Clean first pass</div>
+        </div>
+        <div class="border-2 border-brand-black p-3 bg-brand-yellow/10">
+          <div class="font-display text-2xl">0</div>
+          <div class="text-[9px] font-bold uppercase tracking-widest opacity-70">Telemetry sent</div>
+        </div>
+      </div>
+
+      <!-- Awards -->
+      <div class="reveal-on-scroll mt-8 flex flex-wrap justify-center gap-2">
+        <span class="bg-brand-black text-brand-cream text-[10px] font-bold uppercase tracking-widest px-3 py-2 -rotate-1">★ GitHub Star #44 · Dev Tools</span>
+        <span class="bg-brand-black text-brand-cream text-[10px] font-bold uppercase tracking-widest px-3 py-2 rotate-1">#1 Show HN · May 2026</span>
+        <span class="bg-brand-black text-brand-cream text-[10px] font-bold uppercase tracking-widest px-3 py-2 -rotate-1">GopherCon 2026 · Lightning Talk</span>
+      </div>
+    </section>
+
+    <!-- ============ 6. FAQ ============ -->
+    <section class="bg-brand-cream pb-16 px-8 md:px-12" id="faq">
+      <div class="reveal-on-scroll text-center mb-8">
+        <h2 class="font-display text-4xl md:text-5xl text-brand-blue uppercase tracking-tight" style="text-shadow: 2px 2px 0px rgba(253,185,19,0.6);">FAQ</h2>
+        <p class="text-[10px] font-bold uppercase tracking-widest text-brand-black/60 mt-2">Click a question to expand</p>
+      </div>
+
+      <div class="max-w-2xl mx-auto space-y-1">
+        <div class="faq-item reveal-on-scroll menu-item cursor-pointer group py-3 border-b border-brand-black/10 hover:border-brand-red transition-colors" data-faq>
+          <span class="font-bold text-xs uppercase tracking-wide group-hover:text-brand-red transition-colors">Is my code sent anywhere?</span><span class="menu-dots group-hover:border-brand-red"></span><span class="faq-toggle font-display text-lg text-brand-red shrink-0">+</span>
+          <div class="faq-a text-xs leading-relaxed text-brand-black/80 mt-2 pr-6">
+            No. soloknuckle runs 100% locally — checks execute on your machine against your files, and nothing is uploaded, logged or phoned home. Zero telemetry is a hard design rule, not a setting you can accidentally flip.
+          </div>
+        </div>
+
+        <div class="faq-item reveal-on-scroll menu-item cursor-pointer group py-3 border-b border-brand-black/10 hover:border-brand-red transition-colors" data-faq>
+          <span class="font-bold text-xs uppercase tracking-wide group-hover:text-brand-red transition-colors">I'm a solo dev. Isn't this overkill?</span><span class="menu-dots group-hover:border-brand-red"></span><span class="faq-toggle font-display text-lg text-brand-red shrink-0">+</span>
+          <div class="faq-a text-xs leading-relaxed text-brand-black/80 mt-2 pr-6">
+            Solo devs are actually the biggest user group (61% of installs). You review the most per capita and have the least time for it. One <span class="font-mono">init</span> replaces hours of hand-writing rules files — and it keeps working as you switch agents and stacks.
+          </div>
+        </div>
+
+        <div class="faq-item reveal-on-scroll menu-item cursor-pointer group py-3 border-b border-brand-black/10 hover:border-brand-red transition-colors" data-faq>
+          <span class="font-bold text-xs uppercase tracking-wide group-hover:text-brand-red transition-colors">Which AI agents and editors are supported?</span><span class="menu-dots group-hover:border-brand-red"></span><span class="faq-toggle font-display text-lg text-brand-red shrink-0">+</span>
+          <div class="faq-a text-xs leading-relaxed text-brand-black/80 mt-2 pr-6">
+            Claude Code, Cursor, GitHub Copilot, Aider and any MCP-capable tool out of the box. Anything else works through plain pre-commit hooks and shell scripts — the guardrails live in your repo, not inside one vendor's plugin system.
+          </div>
+        </div>
+
+        <div class="faq-item reveal-on-scroll menu-item cursor-pointer group py-3 border-b border-brand-black/10 hover:border-brand-red transition-colors" data-faq>
+          <span class="font-bold text-xs uppercase tracking-wide group-hover:text-brand-red transition-colors">Will it slow my agent down?</span><span class="menu-dots group-hover:border-brand-red"></span><span class="faq-toggle font-display text-lg text-brand-red shrink-0">+</span>
+          <div class="faq-a text-xs leading-relaxed text-brand-black/80 mt-2 pr-6">
+            Median check time is ~3 seconds, and most checks run only on changed files. Compare that to the 45 minutes you'd spend unpicking a bad agent edit — it pays for itself the first time it blocks a secret leak or an out-of-scope rewrite.
+          </div>
+        </div>
+
+        <div class="faq-item reveal-on-scroll menu-item cursor-pointer group py-3 border-b border-brand-black/10 hover:border-brand-red transition-colors" data-faq>
+          <span class="font-bold text-xs uppercase tracking-wide group-hover:text-brand-red transition-colors">Can I use it on private repos and at work?</span><span class="menu-dots group-hover:border-brand-red"></span><span class="faq-toggle font-display text-lg text-brand-red shrink-0">+</span>
+          <div class="faq-a text-xs leading-relaxed text-brand-black/80 mt-2 pr-6">
+            Yes. It's MIT licensed with no accounts, no seats and no phone-home, so there's nothing for your security team to object to. The config file commits into your repo, so the whole team inherits the same guardrails automatically.
+          </div>
+        </div>
+
+        <div class="faq-item reveal-on-scroll menu-item cursor-pointer group py-3 border-b border-brand-black/10 hover:border-brand-red transition-colors" data-faq>
+          <span class="font-bold text-xs uppercase tracking-wide group-hover:text-brand-red transition-colors">What if I already have rules files / pre-commit hooks?</span><span class="menu-dots group-hover:border-brand-red"></span><span class="faq-toggle font-display text-lg text-brand-red shrink-0">+</span>
+          <div class="faq-a text-xs leading-relaxed text-brand-black/80 mt-2 pr-6">
+            They coexist fine. soloknuckle doesn't replace your existing hooks or editor rules — it adds runtime enforcement on top. <span class="font-mono">init</span> detects what you already have and wires around it instead of over it.
+          </div>
+        </div>
+
+        <div class="faq-item reveal-on-scroll menu-item cursor-pointer group py-3 border-b border-brand-black/10 hover:border-brand-red transition-colors" data-faq>
+          <span class="font-bold text-xs uppercase tracking-wide group-hover:text-brand-red transition-colors">How do I uninstall it?</span><span class="menu-dots group-hover:border-brand-red"></span><span class="faq-toggle font-display text-lg text-brand-red shrink-0">+</span>
+          <div class="faq-a text-xs leading-relaxed text-brand-black/80 mt-2 pr-6">
+            One command, zero residue: <span class="font-mono">npm uninstall -g soloknuckle</span> and delete the <span class="font-mono">.sk/</span> folder. No daemons, no background processes, nothing hiding in your shell profile.
+          </div>
+        </div>
+
+        <div class="faq-item reveal-on-scroll menu-item cursor-pointer group py-3 border-b border-brand-black/10 hover:border-brand-red transition-colors" data-faq>
+          <span class="font-bold text-xs uppercase tracking-wide group-hover:text-brand-red transition-colors">Is it really free?</span><span class="menu-dots group-hover:border-brand-red"></span><span class="faq-toggle font-display text-lg text-brand-red shrink-0">+</span>
+          <div class="faq-a text-xs leading-relaxed text-brand-black/80 mt-2 pr-6">
+            Yes — MIT licensed, every feature, forever. If it saves you one bad Friday, <a href="https://www.buymeacoffee.com/remarkablers" target="_blank" rel="noopener" class="text-brand-red underline font-bold">buy the maintainer a coffee</a>. That's the entire business model.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 7. FINAL CTA ============ -->
+    <section class="bg-brand-red text-brand-cream relative py-14 px-8 md:px-12 overflow-hidden" id="cta">
+      <div class="absolute top-4 left-4 w-16 h-16 border-2 border-brand-cream/20 rounded-full animate-spin-slow pointer-events-none"></div>
+      <div class="relative z-10 text-center reveal-on-scroll">
+        <h2 class="font-display text-4xl md:text-5xl uppercase tracking-tight" style="text-shadow: 3px 3px 0px rgba(0,0,0,0.2);">Ready to knuckle down?</h2>
+        <p class="mt-3 text-xs md:text-sm uppercase tracking-wide opacity-90 max-w-md mx-auto">Your next agent edit could be your next incident. Guardrail it in 60 seconds.</p>
+
+        <div class="mt-8 max-w-xl mx-auto text-left">
+          <div class="text-[10px] font-bold uppercase tracking-widest bg-brand-black/30 inline-block px-2 py-1 mb-2">Click copy → paste in your terminal → press Enter</div>
+          <div class="cmd-box bg-brand-black text-brand-cream font-mono text-[11px] md:text-xs p-4 pr-28 shadow-[6px_6px_0px_rgba(0,0,0,0.25)]">
+            <span class="text-brand-green">$</span> <span>npm install -g soloknuckle     # or: npx soloknuckle check   (no install needed)</span>
+            <button class="copy-btn absolute top-2 right-2 bg-brand-yellow text-brand-black font-secondary font-bold text-[10px] uppercase tracking-widest px-3 py-2 hover:bg-brand-cream transition-colors" data-copy="npm install -g soloknuckle     # or: npx soloknuckle check   (no install needed)">Copy</button>
+          </div>
+          <div class="cmd-box relative bg-brand-black text-brand-cream font-mono text-[11px] md:text-xs p-4 pr-28 mt-3 shadow-[6px_6px_0px_rgba(0,0,0,0.25)]">
+            <span class="text-brand-yellow">$</span> <span>npx soloknuckle init           # scaffolds hooks, AGENTS.md, IDE/MCP config</span>
+            <button class="copy-btn absolute top-2 right-2 bg-brand-blue text-brand-cream font-secondary font-bold text-[10px] uppercase tracking-widest px-3 py-2 hover:bg-brand-blue/90 transition-colors" data-copy="npx soloknuckle init           # scaffolds hooks, AGENTS.md, IDE/MCP config">Copy</button>
+          </div>
+        </div>
+
+        <!-- Star CTA -->
+        <div class="mt-8">
+          <p class="text-[10px] font-bold uppercase tracking-widest opacity-90 mb-2">Found it useful? Star the repo — it keeps the project alive.</p>
+          <button id="cta-star" class="star-btn inline-flex items-center gap-2 bg-brand-black text-brand-cream font-bold text-xs uppercase tracking-widest px-5 py-3 shadow-[4px_4px_0px_rgba(0,0,0,0.3)] hover:bg-brand-cream hover:text-brand-black transition-colors" data-star>
+            <span class="star-glyph text-brand-yellow">★</span>
+            <span>Star on GitHub</span>
+            <span class="opacity-60">·</span>
+            <span class="star-count">287</span>
+          </button>
+          <p class="text-[9px] opacity-70 mt-2">One click, opens GitHub — starring takes 2 seconds.</p>
+        </div>
+
+        <!-- Buy Me a Coffee -->
+        <div class="mt-8 flex justify-center">
+          <script type="text/javascript" src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js" data-name="bmc-button" data-slug="remarkablers" data-color="#FFDD00" data-emoji="🏁" data-font="Cookie" data-text="Buy me a ferrari" data-outline-color="#000000" data-font-color="#000000" data-coffee-color="#ffffff"></script>
+        </div>
+      </div>
+    </section>
+
+    </main>
+
+    <!-- ============ FOOTER ============ -->
+    <footer class="bg-brand-black text-brand-cream pt-16 pb-8 px-8 md:px-12 relative z-0">
+      <div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-12">
+        <div class="text-[10px] md:text-xs font-bold uppercase tracking-widest space-y-2 opacity-70 reveal-on-scroll">
+          <div>soloknuckle v1.0 · MIT</div>
+          <div>npm install -g soloknuckle</div>
+          <div class="pt-4">100% Local · Zero Telemetry</div>
+          <div>macOS / Windows / Linux</div>
+          <div class="pt-4 hover:text-brand-red transition-colors cursor-pointer"><a href="mailto:hello@soloknuckle.dev">hello@soloknuckle.dev</a></div>
+          <div class="hover:text-brand-red transition-colors cursor-pointer"><a href="https://github.com/soch-ship-it/soloknuckle" target="_blank" rel="noopener">github.com/soch-ship-it/soloknuckle</a></div>
+        </div>
+
+        <div class="mx-auto mb-8 md:mb-0 reveal-on-scroll delay-100">
+          <div class="w-32 h-16 border border-brand-cream/30 flex items-center justify-center hover:border-brand-cream hover:bg-white/5 transition-all cursor-pointer">
+            <div class="w-24 h-8 border border-brand-cream/30 flex items-center justify-center">
+              <span class="font-display text-sm tracking-widest">SK</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex flex-col items-end gap-2 reveal-on-scroll delay-200">
+          <div class="flex gap-4 text-[10px] md:text-xs font-bold uppercase tracking-widest">
+            <a href="#features" class="hover:text-brand-red transition">Features</a>
+            <a href="#cases" class="hover:text-brand-red transition">Case Studies</a>
+          </div>
+          <div class="flex gap-4 text-[10px] md:text-xs font-bold uppercase tracking-widest">
+            <a href="#faq" class="hover:text-brand-red transition">FAQ</a>
+            <a href="#get-started" class="hover:text-brand-red transition">Install</a>
+          </div>
+          <div class="flex gap-3 mt-4">
+            <a href="https://github.com/soch-ship-it/soloknuckle" target="_blank" rel="noopener" title="GitHub" class="w-6 h-6 border border-brand-cream rotate-45 flex items-center justify-center hover:bg-brand-cream hover:text-brand-black transition cursor-pointer group">
+              <span class="-rotate-45 font-bold text-[10px] group-hover:rotate-0 transition-transform">GH</span>
+            </a>
+            <a href="https://www.buymeacoffee.com/remarkablers" target="_blank" rel="noopener" title="Buy Me a Coffee" class="w-6 h-6 border border-brand-cream rotate-45 flex items-center justify-center hover:bg-brand-cream hover:text-brand-black transition cursor-pointer group">
+              <span class="-rotate-45 font-bold text-[10px] group-hover:rotate-0 transition-transform">☕</span>
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="mt-10 pt-4 border-t border-brand-cream/10 text-[9px] uppercase tracking-widest opacity-40 flex flex-col md:flex-row justify-between gap-2">
+        <span>© 2026 soloknuckle · Built with Freebuff</span>
+        <span>Case studies &amp; testimonial metrics are illustrative examples</span>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Sticky GitHub Star Button -->
+  <div id="sticky-star" class="fixed bottom-4 right-4 z-50 flex flex-col items-end gap-1">
+    <span id="star-hint" class="bg-brand-black text-brand-cream text-[9px] font-bold uppercase tracking-widest px-2 py-1 opacity-0 transition-opacity duration-500">Enjoying soloknuckle?</span>
+    <button id="sticky-star-btn" data-star class="star-btn flex items-center gap-2 bg-brand-cream border-2 border-brand-black text-brand-black font-bold text-xs uppercase tracking-widest px-4 py-3 shadow-[4px_4px_0px_rgba(0,0,0,0.35)] hover:bg-brand-yellow hover:-translate-y-0.5 transition-all">
+      <span class="star-glyph text-brand-black">☆</span>
+      <span>Star</span>
+      <span class="font-mono star-count" id="gh-stars-sticky">287</span>
+    </button>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      /* ---------- Reveal on scroll ---------- */
+      const observer = new IntersectionObserver((entries, obs) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) { entry.target.classList.add('is-visible'); obs.unobserve(entry.target); }
+        });
+      }, { root: null, rootMargin: '0px', threshold: 0.1 });
+      document.querySelectorAll('.reveal-on-scroll').forEach(el => observer.observe(el));
+
+      /* ---------- Copy buttons ---------- */
+      function flashCopied(btn) {
+        const original = btn.textContent;
+        btn.classList.add('copied');
+        btn.textContent = 'COPIED ✓';
+        setTimeout(() => { btn.classList.remove('copied'); btn.textContent = original; }, 1600);
+      }
+      function copyText(text, btn) {
+        if (navigator.clipboard && window.isSecureContext) {
+          navigator.clipboard.writeText(text).then(() => flashCopied(btn)).catch(() => fallbackCopy(text, btn));
+        } else { fallbackCopy(text, btn); }
+      }
+      function fallbackCopy(text, btn) {
+        const ta = document.createElement('textarea');
+        ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+        document.body.appendChild(ta); ta.select();
+        try { document.execCommand('copy'); flashCopied(btn); } catch (e) { btn.textContent = 'SELECT & COPY'; }
+        document.body.removeChild(ta);
+      }
+      document.querySelectorAll('.copy-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => { e.stopPropagation(); copyText(btn.dataset.copy, btn); });
+      });
+
+      /* ---------- FAQ accordion ---------- */
+      document.querySelectorAll('[data-faq]').forEach(item => {
+        item.addEventListener('click', () => item.classList.toggle('open'));
+      });
+
+      /* ---------- GitHub stars (live count, no key) ---------- */
+      const REPO = 'soch-ship-it/soloknuckle';
+      fetch('https://api.github.com/repos/' + REPO)
+        .then(r => (r.ok ? r.json() : null))
+        .then(data => {
+          if (data && typeof data.stargazers_count === 'number') {
+            document.querySelectorAll('.star-count, #gh-stars, #gh-stars-hero').forEach(el => { el.textContent = data.stargazers_count; });
+          }
+        })
+        .catch(() => { /* keep invented placeholder counts */ });
+
+      /* ---------- Star system (click → open GitHub to star, remember vote) ---------- */
+      const REPO_URL = 'https://github.com/soch-ship-it/soloknuckle';
+      const STAR_KEY = 'sk_starred_v1';
+      const starred = (() => { try { return localStorage.getItem(STAR_KEY) === '1'; } catch (e) { return false; } })();
+
+      function paintVoted() {
+        if (!starred) return;
+        document.querySelectorAll('.star-btn').forEach(b => {
+          b.classList.add('voted');
+          const g = b.querySelector('.star-glyph');
+          if (g) g.textContent = '★';
+          const label = b.querySelector('span:nth-child(2)');
+          if (label && label.textContent.trim().toLowerCase().startsWith('star')) label.textContent = 'STARRING ✓';
+        });
+      }
+      paintVoted();
+
+      document.querySelectorAll('[data-star]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          window.open(REPO_URL, '_blank', 'noopener');
+          try { localStorage.setItem(STAR_KEY, '1'); } catch (e) {}
+          btn.classList.add('voted');
+          const g = btn.querySelector('.star-glyph'); if (g) g.textContent = '★';
+          // optimistic count bump
+          document.querySelectorAll('.star-count, #gh-stars, #gh-stars-hero').forEach(el => {
+            const n = parseInt(el.textContent.replace(/[^0-9]/g, ''), 10);
+            if (!isNaN(n) && !btn.dataset.bumped) el.textContent = (n + 1).toLocaleString('en-US');
+          });
+          btn.dataset.bumped = '1';
+        });
+      });
+
+      /* ---------- Sticky star hint ---------- */
+      const hint = document.getElementById('star-hint');
+      if (hint && !starred) {
+        setTimeout(() => { hint.style.opacity = '1'; }, 4000);
+        setTimeout(() => { hint.style.opacity = '0'; }, 12000);
+      }
+    });
+  </script>
+</body>
+</html>
