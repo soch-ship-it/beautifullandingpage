@@ -137,10 +137,13 @@
   </script>
 </head>
 
-<body class="flex justify-center min-h-screen py-4 md:py-8 bg-brand-yellow font-secondary text-brand-black overflow-x-hidden">
+<body class="flex justify-center min-h-screen py-4 md:py-8 bg-brand-black font-secondary text-brand-black overflow-x-hidden">
+
+  <!-- CRT terminal backdrop (fixed, full viewport) -->
+  <canvas id="crt-bg" aria-hidden="true" style="position:fixed; inset:0; width:100vw; height:100vh; z-index:0; pointer-events:none;"></canvas>
 
   <!-- Main Container Frame -->
-  <div class="w-full max-w-3xl bg-brand-cream shadow-[0px_0px_50px_rgba(0,0,0,0.3)] relative mx-auto flex flex-col">
+  <div class="w-full max-w-3xl bg-brand-cream/95 shadow-[0px_0px_50px_rgba(0,0,0,0.6)] relative mx-auto flex flex-col" style="z-index:10;">
 
     <!-- ============ HEADER ============ -->
     <header class="pt-24 pb-16 relative z-20 overflow-hidden">
@@ -637,6 +640,8 @@
       <span class="font-mono star-count" id="gh-stars-sticky">287</span>
     </button>
   </div>
+
+  <script type="module" src="assets/faulty-terminal.js"></script>
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
