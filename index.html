@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Soloknuckle — Guardrails for AI Coding Agents</title>
-  <meta name="description" content="soloknuckle drops smart guardrails into Claude Code, Cursor & Copilot so AI ships code you actually reviewed. One command to install, zero telemetry, MIT licensed.">
+  <meta name="description" content="soloknuckle drops smart guardrails into Claude Code, Cursor & Copilot so AI ships code you actually reviewed. One command to install, zero telemetry, ISC licensed.">
   <link rel="canonical" href="https://soch-ship-it.github.io/beautifullandingpage/">
   <!-- Open Graph -->
   <meta property="og:type" content="website">
@@ -24,7 +24,7 @@
     "operatingSystem": "macOS, Windows, Linux",
     "description": "Smart guardrails for AI coding agents. Hooks, checks and policies that keep Claude Code, Cursor and Copilot honest.",
     "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
-    "license": "https://opensource.org/licenses/MIT",
+    "license": "https://opensource.org/licenses/ISC",
     "url": "https://github.com/soch-ship-it/soloknuckle"
   }
   </script>
@@ -71,6 +71,24 @@
     /* Star button voted state */
     .star-btn.voted { pointer-events: none; }
     .star-btn.voted .star-glyph { color: #fdb913; }
+
+    /* Pulse & glow: invite the click */
+    .pulse-glow { animation: glowPulse 2.2s ease-in-out infinite; }
+    @keyframes glowPulse {
+      0%, 100% { box-shadow: 6px 6px 0px rgba(0,0,0,0.2), 0 0 0px 0px rgba(253,185,19,0); }
+      50% { box-shadow: 6px 6px 0px rgba(0,0,0,0.2), 0 0 26px 6px rgba(253,185,19,0.55); }
+    }
+    .star-btn { animation: starPulse 1.8s ease-in-out infinite; }
+    .star-btn.voted { animation: none; }
+    @keyframes starPulse {
+      0%, 100% { box-shadow: 4px 4px 0px rgba(0,0,0,0.3), 0 0 0px 0px rgba(253,185,19,0); }
+      50% { box-shadow: 4px 4px 0px rgba(0,0,0,0.3), 0 0 20px 6px rgba(253,185,19,0.55); }
+    }
+    .bmc-wrap a { display: inline-block; animation: bmcGlow 2s ease-in-out infinite; border-radius: 6px; }
+    @keyframes bmcGlow {
+      0%, 100% { filter: drop-shadow(0 0 3px rgba(255,221,0,0.5)); transform: scale(1); }
+      50% { filter: drop-shadow(0 0 14px rgba(255,221,0,0.95)); transform: scale(1.05); }
+    }
   </style>
   <style type="text/tailwindcss">@import "tailwindcss";</style>
   <script src="https://cdn.tailwindcss.com"></script>
@@ -143,7 +161,7 @@
       <!-- Top Nav -->
       <div class="header-animate-in relative z-20 flex justify-between items-start px-6 md:px-8 text-[10px] font-bold tracking-widest text-brand-red uppercase">
         <div class="leading-tight hover:text-brand-black transition-colors cursor-default border-l-2 border-brand-red pl-2">
-          Open Source<br>MIT Licensed
+          Open Source<br>ISC Licensed
         </div>
         <div class="flex gap-4 md:gap-8">
           <a href="#value" class="hover:text-brand-black hover:scale-110 transition-all inline-block">Why</a>
@@ -203,28 +221,21 @@
         <!-- Primary CTA: install command with copy button -->
         <div class="mt-8 max-w-xl mx-auto">
           <div class="text-[10px] font-bold uppercase tracking-widest text-brand-green mb-2 border-l-2 border-brand-green pl-2 text-left">
-            Step 1 — Install &amp; first check · click copy → paste in your terminal → press Enter
+            Install — click copy → paste in your terminal → press Enter
           </div>
-          <div class="cmd-box bg-brand-black text-brand-cream font-mono text-[11px] md:text-xs p-4 pr-28 text-left shadow-[6px_6px_0px_rgba(0,0,0,0.2)]">
-            <span class="text-brand-green">$</span> <span id="cmd-install">npm install -g soloknuckle     # or: npx soloknuckle check   (no install needed)</span>
-            <button class="copy-btn absolute top-2 right-2 bg-brand-red text-brand-cream font-secondary font-bold text-[10px] uppercase tracking-widest px-3 py-2 hover:bg-brand-red/90 transition-colors" data-copy="npm install -g soloknuckle     # or: npx soloknuckle check   (no install needed)">Copy</button>
+          <div class="cmd-box pulse-glow bg-brand-black text-brand-cream font-mono text-[11px] md:text-xs p-4 pr-28 text-left shadow-[6px_6px_0px_rgba(0,0,0,0.2)]">
+            <span class="text-brand-green">$</span> <span id="cmd-install">npm install -g soloknuckle</span>
+            <button class="copy-btn absolute top-2 right-2 bg-brand-red text-brand-cream font-secondary font-bold text-[10px] uppercase tracking-widest px-3 py-2 hover:bg-brand-red/90 transition-colors" data-copy="npm install -g soloknuckle">Copy</button>
           </div>
 
-          <!-- Secondary command -->
-          <div class="text-[10px] font-bold uppercase tracking-widest text-brand-blue mb-2 mt-6 border-l-2 border-brand-blue pl-2 text-left">
-            Step 2 — Scaffold hooks, AGENTS.md &amp; IDE/MCP config for your repo
-          </div>
-          <div class="cmd-box bg-brand-black text-brand-cream font-mono text-[11px] md:text-xs p-4 pr-28 text-left shadow-[6px_6px_0px_rgba(0,0,0,0.2)]">
-            <span class="text-brand-yellow">$</span> <span id="cmd-init">npx soloknuckle init           # scaffolds hooks, AGENTS.md, IDE/MCP config</span>
-            <button class="copy-btn absolute top-2 right-2 bg-brand-blue text-brand-cream font-secondary font-bold text-[10px] uppercase tracking-widest px-3 py-2 hover:bg-brand-blue/90 transition-colors" data-copy="npx soloknuckle init           # scaffolds hooks, AGENTS.md, IDE/MCP config">Copy</button>
-          </div>
+
         </div>
 
         <!-- Trust indicators -->
         <div class="mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-[10px] md:text-[11px] font-bold uppercase tracking-widest text-brand-black/70">
           <span class="flex items-center gap-1"><span class="text-brand-yellow text-base leading-none">★</span> 4.9/5 · <span id="gh-stars-hero">287</span> GitHub stars</span>
           <span>·</span><span>12,400+ installs</span>
-          <span>·</span><span>MIT · 100% local</span>
+          <span>·</span><span>ISC · 100% local</span>
           <span>·</span><span>macOS / Windows / Linux</span>
         </div>
       </div>
@@ -254,7 +265,7 @@
         </div>
         <div class="reveal-on-scroll delay-[250ms] border border-brand-cream/20 p-3 text-center hover:border-brand-blue transition-colors">
           <div class="font-display text-2xl text-blue-300">$0</div>
-          <div class="text-[9px] font-bold uppercase tracking-widest opacity-70 mt-1">Forever · MIT</div>
+          <div class="text-[9px] font-bold uppercase tracking-widest opacity-70 mt-1">Forever · ISC</div>
         </div>
       </div>
 
@@ -319,7 +330,7 @@
             <h3 class="font-bold text-xs uppercase tracking-widest text-brand-green mb-4 mt-8 border-b border-brand-green/20 pb-1">Deploy Anywhere</h3>
             <ul class="space-y-3 text-xs font-bold text-brand-black/80 uppercase">
               <li class="menu-item group hover:text-brand-red transition-colors cursor-pointer" title="One command scaffolds hooks, docs and IDE config">
-                <span>soloknuckle init</span><span class="menu-dots group-hover:border-brand-red"></span><span>60 sec</span>
+                <span>One-command setup</span><span class="menu-dots group-hover:border-brand-red"></span><span>60 sec</span>
               </li>
               <li class="menu-item group hover:text-brand-red transition-colors cursor-pointer" title="Generates agent-readable project rules from your config">
                 <span>AGENTS.md Generator</span><span class="menu-dots group-hover:border-brand-red"></span><span>auto</span>
@@ -338,13 +349,13 @@
             <h3 class="font-bold text-xs uppercase tracking-widest text-brand-green mb-4 border-b border-brand-green/20 pb-1">Proof It Works</h3>
             <ul class="space-y-3 text-xs font-bold text-brand-black/80 uppercase">
               <li class="menu-item group hover:text-brand-red transition-colors cursor-pointer" title="Read the full field report below">
-                <span>NESTBLOOM E-COMMERCE</span><span class="menu-dots group-hover:border-brand-red"></span><span class="text-brand-green">100+ PRs</span>
+                <span>E-COMMERCE PLATFORM</span><span class="menu-dots group-hover:border-brand-red"></span><span class="text-brand-green">100+ PRs</span>
               </li>
               <li class="menu-item group hover:text-brand-red transition-colors cursor-pointer" title="Read the full field report below">
-                <span>WOKFIRE POS</span><span class="menu-dots group-hover:border-brand-red"></span><span class="text-brand-green">96% clean</span>
+                <span>RESTAURANT POS</span><span class="menu-dots group-hover:border-brand-red"></span><span class="text-brand-green">96% clean</span>
               </li>
               <li class="menu-item group hover:text-brand-red transition-colors cursor-pointer" title="Read the full field report below">
-                <span>SUI GENERIS STUDIO</span><span class="menu-dots group-hover:border-brand-red"></span><span class="text-brand-green">3 wks</span>
+                <span>DESIGN STUDIO</span><span class="menu-dots group-hover:border-brand-red"></span><span class="text-brand-green">3 wks</span>
               </li>
             </ul>
 
@@ -382,7 +393,7 @@
               <span class="bg-blue-800 px-1">100+ PRs</span>
               <span class="bg-blue-800 px-1">9-person team</span>
             </div>
-            <h3 class="font-display text-2xl text-brand-yellow mb-1 group-hover:text-white transition-colors">NESTBLOOM</h3>
+            <h3 class="font-display text-2xl text-brand-yellow mb-1 group-hover:text-white transition-colors">CASE STUDY 01</h3>
             <h4 class="font-display text-xl opacity-90">E-COMMERCE PLATFORM</h4>
             <p class="text-[11px] uppercase tracking-wide opacity-70 mt-2 max-w-md leading-relaxed group-hover:opacity-100 transition-opacity">
               A two-person platform team reviews every PR from nine AI-assisted engineers. After a near-miss where an agent printed a Stripe test key into CI logs, they wired in soloknuckle.
@@ -398,7 +409,7 @@
               <span class="bg-blue-800 px-1">96%</span>
               <span class="bg-blue-800 px-1">6 weeks</span>
             </div>
-            <h3 class="font-display text-2xl text-white mb-1 group-hover:text-brand-yellow transition-colors">WOKFIRE</h3>
+            <h3 class="font-display text-2xl text-white mb-1 group-hover:text-brand-yellow transition-colors">CASE STUDY 02</h3>
             <h4 class="font-display text-xl opacity-90">RESTAURANT POS + APP</h4>
             <p class="text-[11px] uppercase tracking-wide opacity-70 mt-2 max-w-md leading-relaxed group-hover:opacity-100 transition-opacity">
               A solo founder ships menu, payments and kiosk UI with three AI agents in parallel. Agents kept "refactoring" the payment adapter unasked — a PCI-scoped file nobody wanted touched.
@@ -414,7 +425,7 @@
               <span class="bg-blue-800 px-1">3 wks</span>
               <span class="bg-blue-800 px-1">1 repo</span>
             </div>
-            <h3 class="font-display text-4xl text-white group-hover:text-brand-yellow transition-colors">SUI GENERIS</h3>
+            <h3 class="font-display text-4xl text-white group-hover:text-brand-yellow transition-colors">CASE STUDY 03</h3>
             <div class="text-[10px] font-bold uppercase tracking-wider opacity-70">PORTFOLIO &amp; CMS MIGRATION · BEFORE → AFTER: 4 UNREVIEWED AGENT COMMITS/WEEK → 0</div>
             <p class="text-[11px] uppercase tracking-wide opacity-70 mt-2 max-w-md leading-relaxed group-hover:opacity-100 transition-opacity">
               A two-brother design studio rebuilt their client CMS with Claude Code. The agent kept "helpfully" updating content the humans had hand-tuned. soloknuckle's review gate now holds every content-path diff for a human click.
@@ -463,40 +474,37 @@
           <div class="text-brand-yellow text-sm tracking-widest">★★★★★</div>
           <p class="text-xs leading-relaxed mt-2 font-bold">"Our agents got hook, line and sinker. Review prep per PR dropped from 45 minutes to 12 — and nothing unreviewed touches main anymore."</p>
           <div class="mt-3 flex items-center gap-2">
-            <div class="w-8 h-8 bg-brand-blue text-brand-cream flex items-center justify-center font-display text-sm">P</div>
-            <div class="text-[10px] font-bold uppercase tracking-widest leading-tight">Priya Raghavan<br><span class="opacity-60">Platform Lead · NestBloom</span></div>
+            <div class="w-8 h-8 bg-brand-blue text-brand-cream flex items-center justify-center font-display text-sm">01</div>
+            <div class="text-[10px] font-bold uppercase tracking-widest leading-tight">Platform Lead</div>
           </div>
         </div>
         <div class="reveal-on-scroll delay-[200ms] bg-white/60 border-2 border-brand-black p-4 shadow-[6px_6px_0px_rgba(0,143,76,0.3)] hover:-translate-y-1 transition-transform">
           <div class="text-brand-yellow text-sm tracking-widest">★★★★★</div>
           <p class="text-xs leading-relaxed mt-2 font-bold">"Scope walls are the killer feature. The payment adapter is finally off-limits to agents, and I stopped triple-checking every diff at 1am."</p>
           <div class="mt-3 flex items-center gap-2">
-            <div class="w-8 h-8 bg-brand-green text-brand-cream flex items-center justify-center font-display text-sm">M</div>
-            <div class="text-[10px] font-bold uppercase tracking-widest leading-tight">Marcus Oyelaran<br><span class="opacity-60">Solo Founder · Wokfire POS</span></div>
+            <div class="w-8 h-8 bg-brand-green text-brand-cream flex items-center justify-center font-display text-sm">02</div>
+            <div class="text-[10px] font-bold uppercase tracking-widest leading-tight">Solo Founder</div>
           </div>
         </div>
         <div class="reveal-on-scroll delay-[300ms] bg-white/60 border-2 border-brand-black p-4 shadow-[6px_6px_0px_rgba(233,78,51,0.3)] hover:-translate-y-1 transition-transform">
           <div class="text-brand-yellow text-sm tracking-widest">★★★★★</div>
-          <p class="text-xs leading-relaxed mt-2 font-bold">"One init command, and every agent on the team got polite. The review gate is exactly the leash we needed — and it's all local."</p>
+          <p class="text-xs leading-relaxed mt-2 font-bold">"One install command, and every agent on the team got polite. The review gate is exactly the leash we needed — and it's all local."</p>
           <div class="mt-3 flex items-center gap-2">
-            <div class="w-8 h-8 bg-brand-red text-brand-cream flex items-center justify-center font-display text-sm">J</div>
-            <div class="text-[10px] font-bold uppercase tracking-widest leading-tight">Jonas &amp; Mikkel Sui Generis<br><span class="opacity-60">Design Studio</span></div>
+            <div class="w-8 h-8 bg-brand-red text-brand-cream flex items-center justify-center font-display text-sm">03</div>
+            <div class="text-[10px] font-bold uppercase tracking-widest leading-tight">Design Studio Owner</div>
           </div>
         </div>
       </div>
 
-      <!-- Logo wall -->
-      <div class="reveal-on-scroll mt-10">
-        <div class="text-[9px] font-bold uppercase tracking-widest text-brand-black/50 text-center mb-3">Used by engineers at</div>
+      <!-- Trusted by -->
+      <div class="reveal-on-scroll mt-10 text-center">
+        <div class="text-[9px] font-bold uppercase tracking-widest text-brand-black/50 mb-3">Trusted by</div>
         <div class="flex flex-wrap justify-center gap-2">
-          <span class="border border-brand-black/30 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-brand-black/60 hover:text-brand-black hover:border-brand-black transition-colors">NESTBLOOM</span>
-          <span class="border border-brand-black/30 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-brand-black/60 hover:text-brand-black hover:border-brand-black transition-colors">WOKFIRE</span>
-          <span class="border border-brand-black/30 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-brand-black/60 hover:text-brand-black hover:border-brand-black transition-colors">SUI GENERIS</span>
-          <span class="border border-brand-black/30 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-brand-black/60 hover:text-brand-black hover:border-brand-black transition-colors">RAILKART</span>
-          <span class="border border-brand-black/30 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-brand-black/60 hover:text-brand-black hover:border-brand-black transition-colors">HEXFOLK</span>
-          <span class="border border-brand-black/30 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-brand-black/60 hover:text-brand-black hover:border-brand-black transition-colors">PAPERTRAIL CO.</span>
-          <span class="border border-brand-black/30 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-brand-black/60 hover:text-brand-black hover:border-brand-black transition-colors">DASHTIDE</span>
-          <span class="border border-brand-black/30 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-brand-black/60 hover:text-brand-black hover:border-brand-black transition-colors">ORBITLESS</span>
+          <span class="border border-brand-black/30 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-brand-black/60">SOLO DEVELOPERS</span>
+          <span class="border border-brand-black/30 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-brand-black/60">PLATFORM TEAMS</span>
+          <span class="border border-brand-black/30 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-brand-black/60">FREELANCERS</span>
+          <span class="border border-brand-black/30 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-brand-black/60">AGENCY DEVS</span>
+          <span class="border border-brand-black/30 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-brand-black/60">OPEN-SOURCE MAINTAINERS</span>
         </div>
       </div>
 
@@ -546,7 +554,7 @@
         <div class="faq-item reveal-on-scroll menu-item cursor-pointer group py-3 border-b border-brand-black/10 hover:border-brand-red transition-colors" data-faq>
           <span class="font-bold text-xs uppercase tracking-wide group-hover:text-brand-red transition-colors">I'm a solo dev. Isn't this overkill?</span><span class="menu-dots group-hover:border-brand-red"></span><span class="faq-toggle font-display text-lg text-brand-red shrink-0">+</span>
           <div class="faq-a text-xs leading-relaxed text-brand-black/80 mt-2 pr-6">
-            Solo devs are actually the biggest user group (61% of installs). You review the most per capita and have the least time for it. One <span class="font-mono">init</span> replaces hours of hand-writing rules files — and it keeps working as you switch agents and stacks.
+            Solo devs are actually the biggest user group (61% of installs). You review the most per capita and have the least time for it. One install replaces hours of hand-writing rules files — and it keeps working as you switch agents and stacks.
           </div>
         </div>
 
@@ -567,14 +575,14 @@
         <div class="faq-item reveal-on-scroll menu-item cursor-pointer group py-3 border-b border-brand-black/10 hover:border-brand-red transition-colors" data-faq>
           <span class="font-bold text-xs uppercase tracking-wide group-hover:text-brand-red transition-colors">Can I use it on private repos and at work?</span><span class="menu-dots group-hover:border-brand-red"></span><span class="faq-toggle font-display text-lg text-brand-red shrink-0">+</span>
           <div class="faq-a text-xs leading-relaxed text-brand-black/80 mt-2 pr-6">
-            Yes. It's MIT licensed with no accounts, no seats and no phone-home, so there's nothing for your security team to object to. The config file commits into your repo, so the whole team inherits the same guardrails automatically.
+            Yes. It's ISC licensed with no accounts, no seats and no phone-home, so there's nothing for your security team to object to. The config file commits into your repo, so the whole team inherits the same guardrails automatically.
           </div>
         </div>
 
         <div class="faq-item reveal-on-scroll menu-item cursor-pointer group py-3 border-b border-brand-black/10 hover:border-brand-red transition-colors" data-faq>
           <span class="font-bold text-xs uppercase tracking-wide group-hover:text-brand-red transition-colors">What if I already have rules files / pre-commit hooks?</span><span class="menu-dots group-hover:border-brand-red"></span><span class="faq-toggle font-display text-lg text-brand-red shrink-0">+</span>
           <div class="faq-a text-xs leading-relaxed text-brand-black/80 mt-2 pr-6">
-            They coexist fine. soloknuckle doesn't replace your existing hooks or editor rules — it adds runtime enforcement on top. <span class="font-mono">init</span> detects what you already have and wires around it instead of over it.
+            They coexist fine. soloknuckle doesn't replace your existing hooks or editor rules — it adds runtime enforcement on top. The installer detects what you already have and wires around it instead of over it.
           </div>
         </div>
 
@@ -588,7 +596,7 @@
         <div class="faq-item reveal-on-scroll menu-item cursor-pointer group py-3 border-b border-brand-black/10 hover:border-brand-red transition-colors" data-faq>
           <span class="font-bold text-xs uppercase tracking-wide group-hover:text-brand-red transition-colors">Is it really free?</span><span class="menu-dots group-hover:border-brand-red"></span><span class="faq-toggle font-display text-lg text-brand-red shrink-0">+</span>
           <div class="faq-a text-xs leading-relaxed text-brand-black/80 mt-2 pr-6">
-            Yes — MIT licensed, every feature, forever. If it saves you one bad Friday, <a href="https://www.buymeacoffee.com/remarkablers" target="_blank" rel="noopener" class="text-brand-red underline font-bold">buy the maintainer a coffee</a>. That's the entire business model.
+            Yes — ISC licensed, every feature, forever. If it saves you one bad Friday, <a href="https://www.buymeacoffee.com/remarkablers" target="_blank" rel="noopener" class="text-brand-red underline font-bold">buy the maintainer a coffee</a>. That's the entire business model.
           </div>
         </div>
       </div>
@@ -603,13 +611,9 @@
 
         <div class="mt-8 max-w-xl mx-auto text-left">
           <div class="text-[10px] font-bold uppercase tracking-widest bg-brand-black/30 inline-block px-2 py-1 mb-2">Click copy → paste in your terminal → press Enter</div>
-          <div class="cmd-box bg-brand-black text-brand-cream font-mono text-[11px] md:text-xs p-4 pr-28 shadow-[6px_6px_0px_rgba(0,0,0,0.25)]">
-            <span class="text-brand-green">$</span> <span>npm install -g soloknuckle     # or: npx soloknuckle check   (no install needed)</span>
-            <button class="copy-btn absolute top-2 right-2 bg-brand-yellow text-brand-black font-secondary font-bold text-[10px] uppercase tracking-widest px-3 py-2 hover:bg-brand-cream transition-colors" data-copy="npm install -g soloknuckle     # or: npx soloknuckle check   (no install needed)">Copy</button>
-          </div>
-          <div class="cmd-box relative bg-brand-black text-brand-cream font-mono text-[11px] md:text-xs p-4 pr-28 mt-3 shadow-[6px_6px_0px_rgba(0,0,0,0.25)]">
-            <span class="text-brand-yellow">$</span> <span>npx soloknuckle init           # scaffolds hooks, AGENTS.md, IDE/MCP config</span>
-            <button class="copy-btn absolute top-2 right-2 bg-brand-blue text-brand-cream font-secondary font-bold text-[10px] uppercase tracking-widest px-3 py-2 hover:bg-brand-blue/90 transition-colors" data-copy="npx soloknuckle init           # scaffolds hooks, AGENTS.md, IDE/MCP config">Copy</button>
+          <div class="cmd-box pulse-glow bg-brand-black text-brand-cream font-mono text-[11px] md:text-xs p-4 pr-28 shadow-[6px_6px_0px_rgba(0,0,0,0.25)]">
+            <span class="text-brand-green">$</span> <span>npm install -g soloknuckle</span>
+            <button class="copy-btn absolute top-2 right-2 bg-brand-yellow text-brand-black font-secondary font-bold text-[10px] uppercase tracking-widest px-3 py-2 hover:bg-brand-cream transition-colors" data-copy="npm install -g soloknuckle">Copy</button>
           </div>
         </div>
 
@@ -626,8 +630,14 @@
         </div>
 
         <!-- Buy Me a Coffee -->
-        <div class="mt-8 flex justify-center">
-          <script type="text/javascript" src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js" data-name="bmc-button" data-slug="remarkablers" data-color="#FFDD00" data-emoji="🏁" data-font="Cookie" data-text="Buy me a ferrari" data-outline-color="#000000" data-font-color="#000000" data-coffee-color="#ffffff"></script>
+        <div class="mt-8 flex justify-center bmc-wrap">
+          <script type="text/javascript" src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js" data-name="bmc-button" data-slug="remarkablers" data-color="#FFDD00" data-emoji="🏁" data-font="Cookie" data-text="Buy me a ferrari" data-outline-color="#000000"  data-font-color="#000000" data-coffee-color="#ffffff" ></script>
+        </div>
+
+        <!-- Newsletter (Kit embed) -->
+        <div class="mt-10 pt-6 border-t border-brand-cream/30">
+          <p class="text-[10px] font-bold uppercase tracking-widest opacity-90 mb-3">Get release notes &amp; new guardrails in your inbox</p>
+          <script async data-uid="f60008f83f" src="https://soloknuckle.kit.com/f60008f83f/index.js"></script>
         </div>
       </div>
     </section>
@@ -638,7 +648,7 @@
     <footer class="bg-brand-black text-brand-cream pt-16 pb-8 px-8 md:px-12 relative z-0">
       <div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-12">
         <div class="text-[10px] md:text-xs font-bold uppercase tracking-widest space-y-2 opacity-70 reveal-on-scroll">
-          <div>soloknuckle v1.0 · MIT</div>
+          <div>soloknuckle v1.0 · ISC</div>
           <div>npm install -g soloknuckle</div>
           <div class="pt-4">100% Local · Zero Telemetry</div>
           <div>macOS / Windows / Linux</div>
