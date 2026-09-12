@@ -6,7 +6,7 @@
 - **License:** ISC (open source)
 - **Platform:** macOS, Windows, Linux
 - **Repo:** https://github.com/soch-ship-it/soloknuckle
-- **Landing page:** https://soloknuckle.is-a.dev/
+- **Landing page:** https://soloknuckle.pages.dev/
 - **Privacy:** 100% local. No telemetry, no analytics, no account, no data collection. Your code and prompts never leave your device.
 
 ## What it does
@@ -42,5 +42,5 @@ soloknuckle drops guardrails into AI coding agents at the hook layer, so an AI a
 
 ## Pages
 
-- [Landing page](https://soloknuckle.is-a.dev/): full pitch, features, FAQ
+- [Landing page](https://soloknuckle.pages.dev/): full pitch, features, FAQ
 - [GitHub repo](https://github.com/soch-ship-it/soloknuckle): source code and issues

@@ -6,7 +6,7 @@
 - **License:** ISC
 - **Platforms:** macOS, Windows, Linux
 - **Repository:** https://github.com/soch-ship-it/soloknuckle
-- **Landing page:** https://soloknuckle.is-a.dev/
+- **Landing page:** https://soloknuckle.pages.dev/
 - **Cost:** $0, no account required
 - **Privacy:** no telemetry, no analytics, no data collection; code and prompts never leave the device
 
@@ -103,6 +103,6 @@ soloknuckle runs entirely on your machine. No telemetry, no analytics, no accoun
 
 ## 8. Key links
 
-- Landing page: https://soloknuckle.is-a.dev/
+- Landing page: https://soloknuckle.pages.dev/
 - Source code: https://github.com/soch-ship-it/soloknuckle
 - Install command: `npm install -g soloknuckle`

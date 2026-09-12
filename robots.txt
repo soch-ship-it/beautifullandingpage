@@ -1,4 +1,4 @@
-# soloknuckle — https://beautifullandingpage.pages.dev
+# soloknuckle — https://soloknuckle.pages.dev
 # Everyone is welcome: search engines AND AI crawlers (Answer Engine Optimization).
 
 User-agent: *
@@ -39,7 +39,7 @@ User-agent: Bytespider
 Allow: /
 
 # LLM-readable site summary and full content
-# https://soloknuckle.is-a.dev/llms.txt
-# https://soloknuckle.is-a.dev/llms-full.txt
+# https://soloknuckle.pages.dev/llms.txt
+# https://soloknuckle.pages.dev/llms-full.txt
 
-Sitemap: https://soloknuckle.is-a.dev/sitemap.xml
+Sitemap: https://soloknuckle.pages.dev/sitemap.xml
